@@ -1,162 +1,114 @@
-"""
-────────────────────────────────────────
- LoliPop Store – Single-file Server
- (Flask + Telegram bot + HTML + CSS)
-────────────────────────────────────────
-Run:  pip install python-telegram-bot==20.1 Flask==3.0.3
-      python app.py        # localhost:8000
-Deploy: Render / Railway / Termux + ngrok
-"""
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>LoliPop Store</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: #f7f7f7;
+      color: #333;
+    }
 
-import os, json
-from flask import Flask, request, jsonify, Response, send_from_directory
-from telegram import Bot, ParseMode
+    header {
+      background: linear-gradient(to right, #ff66cc, #ff99cc);
+      color: white;
+      padding: 2rem;
+      text-align: center;
+      font-size: 2rem;
+      font-weight: bold;
+      letter-spacing: 1px;
+      text-shadow: 1px 1px 2px #00000050;
+    }
 
-# ─── ENV VARS (safer) ──────────────────────────────
-TOKEN   = os.getenv("TOKEN",   "7965746766:AAHTCgZJteje4WvRn4Rxr0aapzg7wmvujG0")
-CHAT_ID = int(os.getenv("CHAT_ID", "1972373864"))
-bot = Bot(TOKEN)
+    .product-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      padding: 2rem;
+      max-width: 1200px;
+      margin: auto;
+    }
 
-app = Flask(__name__)
+    .product-card {
+      background: white;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+      transition: transform 0.4s;
+      transform-style: preserve-3d;
+      perspective: 1000px;
+    }
 
-# ─── HTML  (10 placeholder products) ───────────────
-HTML_PAGE = r"""
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>LoliPop Store</title>
-<style>
-:root { --accent:#ff5dad; --dark:#111; --light:#fff; --shadow:0 4px 16px rgba(0,0,0,.08);}
-*{box-sizing:border-box;scroll-behavior:smooth}
-body{margin:0;font-family:system-ui;background:var(--light);color:var(--dark);}
-.hero{padding:3.5rem 1rem;text-align:center;background:linear-gradient(135deg,#ff5dad 0%,#ffe1f5 100%);}
-.hero h1{font-size:2.6rem;margin:0;font-weight:900;letter-spacing:.03em;}
-.hero p{margin-top:.3rem;font-size:1.05rem;}
-.container{padding:2rem 1rem;max-width:960px;margin:auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));grid-gap:1.7rem;}
-.card{border:2px solid var(--accent);border-radius:1rem;overflow:hidden;box-shadow:var(--shadow);background:#fff;display:flex;flex-direction:column;}
-.card img{width:100%;height:auto;display:block;}
-.info{padding:1rem;flex:1 1 auto;display:flex;flex-direction:column;}
-.info h2{font-size:1.25rem;margin:.3rem 0 .6rem;}
-.price{margin-bottom:1rem;font-size:1.1rem;}
-.price del{color:#777;margin-right:.4rem;}
-.btn{align-self:flex-start;background:var(--accent);color:var(--light);padding:.55rem 1.2rem;font-weight:700;border:none;border-radius:.6rem;text-decoration:none;cursor:pointer;}
-footer{text-align:center;padding:1.2rem 0;color:#666;border-top:1px solid #eee;font-size:.9rem;}
-/* modal */
-#orderModal{position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;align-items:center;justify-content:center;z-index:1000;}
-#orderModal form{background:#fff;padding:2rem;border-radius:1rem;max-width:420px;width:90%;box-shadow:var(--shadow);}
-#orderModal h3{margin-top:0;font-size:1.4rem;}
-#orderModal input,#orderModal textarea{width:100%;padding:.65rem;margin:.4rem 0;border:1px solid #ccc;border-radius:.4rem;font-size:.95rem;}
-#orderModal button{width:100%;margin-top:.6rem;}
-@media (prefers-color-scheme:dark){
-  body{background:#111;color:#eee;}
-  .hero{background:linear-gradient(135deg,#ff5dad 0%,#44112c 100%);}
-  .card{background:#1a1a1a;border-color:#ff5dad;}
-  .info h2{color:#fff;}
-}
-</style>
-</head><body>
+    .product-card:hover {
+      transform: scale(1.05) rotateY(5deg);
+    }
 
-<section class="hero">
-  <h1>LoliPop Store</h1>
-  <p>Cash-on-Delivery • Free Shipping • Limited Stock</p>
-</section>
+    .product-card img {
+      width: 100%;
+      height: 250px;
+      object-fit: cover;
+      border-bottom: 1px solid #eee;
+    }
 
-<main class="container" id="products">
-<!-- ===== 10 Placeholder Products ===== -->
-{products_html}
-</main>
+    .product-info {
+      padding: 1rem;
+      text-align: center;
+    }
 
-<footer>© 2025 LoliPop Store • Powered by Python</footer>
+    .product-info h3 {
+      margin: 0.5rem 0;
+      font-size: 1.2rem;
+    }
 
-<!-- ===== Order Modal ===== -->
-<div id="orderModal">
-  <form id="orderForm">
-    <h3 id="modalTitle">Order</h3>
-    <input type="hidden" id="prodName">
-    <input type="hidden" id="prodPrice">
-    <label>Full Name*<input required id="custName" placeholder="Rahul Mehra"></label>
-    <label>Phone*<input required id="custPhone" placeholder="9876543210"></label>
-    <label>Address*<textarea required id="custAddr" rows="3" placeholder="123 MG Road, Mumbai – 400001"></textarea></label>
-    <label>Quantity*<input type="number" min="1" value="1" id="custQty"></label>
-    <button class="btn" type="submit">Place Order</button>
-  </form>
-</div>
+    .price {
+      color: #e91e63;
+      font-weight: bold;
+    }
 
-<script>
-// modal open
-document.querySelectorAll(".btn").forEach(btn=>{
-  btn.onclick=e=>{
-    const card=e.target.closest(".card");
-    document.getElementById("prodName").value=card.dataset.name;
-    document.getElementById("prodPrice").value=card.dataset.price;
-    document.getElementById("modalTitle").innerText=`Order – ${card.dataset.name}`;
-    document.getElementById("orderModal").style.display="flex";
-  };
-});
-// modal close when bg clicked
-document.getElementById("orderModal").onclick=e=>{
-  if(e.target.id==="orderModal")e.target.style.display="none";
-};
-// send order
-document.getElementById("orderForm").onsubmit=async e=>{
-  e.preventDefault();
-  const data={
-    product :document.getElementById("prodName").value,
-    price   :document.getElementById("prodPrice").value,
-    name    :document.getElementById("custName").value,
-    phone   :document.getElementById("custPhone").value,
-    address :document.getElementById("custAddr").value,
-    qty     :document.getElementById("custQty").value
-  };
-  try{
-    const r=await fetch("/order",{method:"POST",headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});
-    const res=await r.json();
-    if(res.ok){
-      alert("Order placed! Confirmation sent on Telegram.");
-      document.getElementById("orderModal").style.display="none";
-      e.target.reset();
-    }else throw 0;
-  }catch{ alert("Error, try again."); }
-};
-</script>
-</body></html>
-"""
+    @media (max-width: 600px) {
+      header {
+        font-size: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
 
-# ─── Build placeholder product HTML  (edit later) ─────
-PRODUCT_CARD = """
-<div class="card" data-name="Sample Product {i}" data-price="₹499">
-  <img src="https://via.placeholder.com/640x640.png?text=Product+{i}" alt="Product {i}">
-  <div class="info">
-    <h2>Sample Product {i}</h2>
-    <p class="price"><del>₹999</del> <span>₹499</span></p>
-    <button class="btn">Order Now</button>
-  </div>
-</div>
-"""
-products_html = "\n".join(PRODUCT_CARD.format(i=i) for i in range(1,11))
-FULL_PAGE = HTML_PAGE.format(products_html=products_html)
+  <header>LoliPop Store</header>
 
-# ─── Routes ───────────────────────────────────────────
-@app.route("/")
-def home():
-    return Response(FULL_PAGE, mimetype="text/html")
+  <section class="product-container">
+    <!-- PRODUCT 1 -->
+    <div class="product-card">
+      <img src="https://via.placeholder.com/300x250.png?text=Product+1" alt="Product 1">
+      <div class="product-info">
+        <h3>Product Name 1</h3>
+        <p class="price">₹499</p>
+      </div>
+    </div>
 
-@app.route("/order", methods=["POST"])
-def receive_order():
-    data = request.json or {}
-    for k in ("product","price","name","phone","address","qty"):
-        if not data.get(k): return jsonify(ok=False,error="missing"),400
-    msg = (
-        "📦 *New Order – LoliPop Store*\n\n"
-        f"👕 *Product:* {data['product']}\n"
-        f"💰 *Price:* {data['price']}\n"
-        f"🙍 *Name:* {data['name']}\n"
-        f"📞 *Phone:* {data['phone']}\n"
-        f"🏠 *Address:* {data['address']}\n"
-        f"📦 *Qty:* {data['qty']}"
-    )
-    bot.send_message(chat_id=CHAT_ID, text=msg, parse_mode=ParseMode.MARKDOWN)
-    return jsonify(ok=True)
+    <!-- Repeat for 10 products -->
+    <div class="product-card">
+      <img src="https://via.placeholder.com/300x250.png?text=Product+2" alt="Product 2">
+      <div class="product-info">
+        <h3>Product Name 2</h3>
+        <p class="price">₹599</p>
+      </div>
+    </div>
 
-# ─── Run ──────────────────────────────────────────────
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=8000, debug=False)
+    <div class="product-card">
+      <img src="https://via.placeholder.com/300x250.png?text=Product+3" alt="Product 3">
+      <div class="product-info">
+        <h3>Product Name 3</h3>
+        <p class="price">₹699</p>
+      </div>
+    </div>
+
+    <!-- Add up to Product 10 below in same format -->
+    
+  </section>
+
+</body>
+</html>
