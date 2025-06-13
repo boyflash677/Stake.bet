@@ -1,226 +1,160 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>StakeVerse – Betting Se Kamao Paisa</title>
-  <style>
-    * {
-      margin: 0; padding: 0; box-sizing: border-box;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
-    body {
-      background: #0a0a0a;
-      color: #f0f0f0;
-      line-height: 1.6;
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
-    }
-    a {
-      color: inherit;
-      text-decoration: none;
-    }
-    button, a.cta-btn {
-      background: #fbbc05;
-      color: #0a0a0a;
-      padding: 15px 28px;
-      font-weight: 700;
-      border: none;
-      border-radius: 30px;
-      cursor: pointer;
-      transition: background 0.3s ease;
-      display: inline-block;
-      text-align: center;
-      box-shadow: 0 4px 15px rgba(251,188,5,0.4);
-    }
-    button:hover, a.cta-btn:hover {
-      background: #ddb307;
-      box-shadow: 0 6px 20px rgba(221,179,7,0.6);
-    }
-    .container {
-      width: 90%;
-      max-width: 480px;
-      margin: 0 auto;
-      padding: 20px 0 40px;
-      flex-grow: 1;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      text-align: center;
-    }
-    header {
-      padding: 30px 0 20px;
-    }
-    header img {
-      width: 120px;
-      margin-bottom: 15px;
-    }
-    h1 {
-      font-size: 2.2rem;
-      margin-bottom: 12px;
-      font-weight: 900;
-      color: #fbbc05;
-      text-shadow: 1px 1px 4px #b8860b;
-    }
-    .hero-subtext {
-      font-size: 1rem;
-      margin-bottom: 25px;
-      color: #ddd;
-    }
-    .how-it-works {
-      background: #121212;
-      border-radius: 12px;
-      padding: 25px 20px;
-      margin: 30px 0;
-      box-shadow: 0 4px 15px rgba(251,188,5,0.15);
-    }
-    .how-it-works h2 {
-      color: #fbbc05;
-      margin-bottom: 20px;
-      font-weight: 800;
-      font-size: 1.6rem;
-    }
-    .steps {
-      text-align: left;
-      font-weight: 600;
-      font-size: 1rem;
-      line-height: 1.5;
-      color: #eee;
-    }
-    .steps li {
-      margin-bottom: 12px;
-      position: relative;
-      padding-left: 28px;
-    }
-    .steps li::before {
-      content: counter(step-counter);
-      counter-increment: step-counter;
-      position: absolute;
-      left: 0;
-      top: 2px;
-      background: #fbbc05;
-      color: #0a0a0a;
-      width: 22px;
-      height: 22px;
-      border-radius: 50%;
-      text-align: center;
-      font-weight: 700;
-      font-size: 0.9rem;
-      line-height: 22px;
-      user-select: none;
-    }
-    ol.steps {
-      counter-reset: step-counter;
-      padding-left: 10px;
-    }
-    .highlight {
-      background: #fbbc05;
-      color: #0a0a0a;
-      font-weight: bold;
-      padding: 4px 8px;
-      border-radius: 6px;
-    }
-    .telegram-section {
-      background: #fbbc05;
-      color: #0a0a0a;
-      border-radius: 15px;
-      padding: 25px 20px;
-      margin: 30px 0;
-      box-shadow: 0 4px 15px rgba(251,188,5,0.4);
-    }
-    .telegram-section h3 {
-      font-weight: 900;
-      margin-bottom: 15px;
-      font-size: 1.3rem;
-    }
-    .telegram-section p {
-      font-weight: 700;
-      margin-bottom: 20px;
-      font-size: 1rem;
-    }
-    .telegram-section a {
-      font-size: 1.1rem;
-      font-weight: 900;
-      padding: 14px 28px;
-      border-radius: 30px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    }
-    footer {
-      text-align: center;
-      font-size: 0.85rem;
-      padding: 15px 10px;
-      background: #121212;
-      color: #888;
-      border-top: 1px solid #222;
-    }
-    .social-icons {
-      margin-top: 10px;
-    }
-    .social-icons a {
-      margin: 0 10px;
-      color: #fbbc05;
-      font-size: 1.6rem;
-      transition: color 0.3s ease;
-    }
-    .social-icons a:hover {
-      color: #ddb307;
-    }
-    @media (max-width: 480px) {
-      h1 {
-        font-size: 1.8rem;
-      }
-      .how-it-works, .telegram-section {
-        padding: 20px 15px;
-      }
-    }
-  </style>
-</head>
-<body>
-  <header class="container">
-    <img src="https://cdn.stake.com/assets/imgs/logo.svg" alt="Stake Logo" />
-    <h1>Ab Betting Se Kamao Paisa</h1>
-    <p class="hero-subtext">Use our link, start winning today! ✅</p>
-    <a href="https://stake.bet/?c=Im9jkMOQ" target="_blank" rel="noopener" class="cta-btn">🎁 Register Now & Claim Bonus</a>
-  </header>
+"""
+────────────────────────────────────────
+  LoliPop Store – Single-file Server
+  (Flask + Telegram bot + HTML landing)
+────────────────────────────────────────
+Run:   pip install python-telegram-bot==20.1 Flask==3.0.3
+       python app.py
+Deploy: Railway / Render / Termux + ngrok
+"""
 
-  <main class="container">
-    <section class="how-it-works">
-      <h2>How It Works 💸</h2>
-      <ol class="steps">
-        <li><span class="highlight">Register</span> using our exclusive link</li>
-        <li><span class="highlight">Place Bets</span> on Casino, Crash, Dice, etc.</li>
-        <li><span class="highlight">Win Big</span> & unlock daily rakeback rewards</li>
-        <li><span class="highlight">Instant Withdrawal</span> within 1–2 minutes 💰</li>
-        <li><span class="highlight">Join Telegram</span> for free tips & bonus drops!</li>
-      </ol>
-    </section>
+from flask import Flask, request, jsonify, Response
+from telegram import Bot, ParseMode
 
-    <section class="telegram-section">
-      <h3>📢 Free Tips Channel</h3>
-      <p>Daily bonus codes, proofs, & tricks shared free</p>
-      <a href="https://t.me/stakewith_lemon1" target="_blank" rel="noopener" class="cta-btn">Join Tips Channel</a>
-    </section>
+TOKEN   = "7965746766:AAHTCgZJteje4WvRn4Rxr0aapzg7wmvujG0"   # keep secret
+CHAT_ID = 1972373864                                         # your TG ID / channel
 
-    <section class="telegram-section">
-      <h3>💬 Official Discussion Room</h3>
-      <p>Stake tricks, winning bets & active community</p>
-      <a href="https://t.me/stakewith_lemon" target="_blank" rel="noopener" class="cta-btn">Join Discussion Room</a>
-    </section>
+bot = Bot(TOKEN)
+app = Flask(__name__)
 
-    <section class="telegram-section">
-      <h3>🎯 Need Help or Paid Tools?</h3>
-      <p>Message owner directly for exclusive access</p>
-      <a href="https://t.me/Innocent_txt" target="_blank" rel="noopener" class="cta-btn">📩 Contact Now</a>
-    </section>
-  </main>
+# ──────────────────────────────────────────────────
+# HTML LANDING PAGE (10 placeholder products)
+# ──────────────────────────────────────────────────
+HTML_PAGE = """
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>LoliPop Store</title>
+<style>
+:root { --accent:#ff5dad; --dark:#111; --light:#fff; }
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui;background:var(--light);color:var(--dark);}
+.hero{padding:3rem 1rem;text-align:center;background:linear-gradient(135deg,#ff5dad 0%,#ffffff 100%);}
+.hero h1{font-size:2.5rem;margin:0;font-weight:900;letter-spacing:.02em;}
+.container{padding:2rem 1rem;max-width:900px;margin:auto;}
+.product-card{border:2px solid var(--accent);border-radius:1rem;overflow:hidden;margin-bottom:2rem;box-shadow:0 4px 16px rgba(0,0,0,.08);}
+.product-card img{width:100%;height:auto;display:block;}
+.product-info{padding:1rem;}
+.product-info h2{margin:.4rem 0;font-size:1.2rem;}
+.price{font-size:1.05rem;margin-bottom:.6rem;}
+.price del{color:#777;margin-right:.4rem;}
+.btn{display:inline-block;background:var(--accent);color:var(--light);padding:.55rem 1.1rem;font-weight:700;border-radius:.6rem;text-decoration:none;}
+footer{text-align:center;padding:1rem 0;color:#666;border-top:1px solid #eee;font-size:.9rem;}
+/* modal */
+#orderModal{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;}
+#orderModal form{background:#fff;padding:2rem;border-radius:1rem;max-width:420px;width:90%;}
+#orderModal input,#orderModal textarea{width:100%;padding:.6rem;margin:.35rem 0;border:1px solid #ccc;border-radius:.4rem;}
+</style>
+</head><body>
 
-  <footer>
-    <p>Stake is for users 18+ only. Gamble responsibly. ⚠️</p>
-    <div class="social-icons">
-      <a href="https://t.me/stakewith_lemon1" target="_blank" aria-label="Telegram">📢</a>
-      <a href="https://instagram.com/earlybird_in" target="_blank" aria-label="Instagram">📸</a>
+<section class="hero">
+  <h1>LoliPop Store</h1>
+  <p>COD • Free Shipping • Limited Stock</p>
+</section>
+
+<div class="container" id="products">
+
+<!-- ===== 10 Placeholder Products (edit as needed) ===== -->
+{% for i in range(1,11) %}
+  <div class="product-card" data-name="Sample Product {{i}}" data-price="₹499" data-mrp="₹999">
+    <img src="https://via.placeholder.com/640x640.png?text=Product+{{i}}" alt="Product {{i}}">
+    <div class="product-info">
+      <h2>Sample Product {{i}}</h2>
+      <p class="price"><del>₹999</del> <span>₹499</span></p>
+      <a href="#order" class="btn">Order Now</a>
     </div>
-  </footer>
-</body>
-</html>
+  </div>
+{% endfor %}
+<!-- ==================================================== -->
+
+</div>
+
+<footer>© 2025 LoliPop Store</footer>
+
+<!-- Order Modal -->
+<div id="orderModal">
+  <form id="orderForm">
+    <h2 id="modalTitle">Order</h2>
+    <input type="hidden" id="prodName">
+    <input type="hidden" id="prodPrice">
+    <label>Full Name*<input required id="custName" placeholder="Rahul Mehra"></label>
+    <label>Phone*<input required id="custPhone" placeholder="9876543210"></label>
+    <label>Address*<textarea required id="custAddr" rows="3" placeholder="123 MG Road, Mumbai – 400001"></textarea></label>
+    <label>Quantity*<input type="number" min="1" value="1" id="custQty"></label>
+    <button class="btn" type="submit">Place Order</button>
+  </form>
+</div>
+
+<script>
+// open modal
+document.querySelectorAll(".btn").forEach(btn=>{
+  btn.onclick=e=>{
+    const card=e.target.closest(".product-card");
+    document.getElementById("modalTitle").innerText="Order – "+card.dataset.name;
+    document.getElementById("prodName").value=card.dataset.name;
+    document.getElementById("prodPrice").value=card.dataset.price;
+    document.getElementById("orderModal").style.display="flex";
+  };
+});
+document.getElementById("orderModal").onclick=e=>{
+  if(e.target.id==="orderModal")e.target.style.display="none";
+};
+// submit order
+document.getElementById("orderForm").onsubmit=async e=>{
+  e.preventDefault();
+  const data={
+    product:document.getElementById("prodName").value,
+    price  :document.getElementById("prodPrice").value,
+    name   :document.getElementById("custName").value,
+    phone  :document.getElementById("custPhone").value,
+    address:document.getElementById("custAddr").value,
+    qty    :document.getElementById("custQty").value
+  };
+  try{
+    const r=await fetch("/order",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(data)});
+    if((await r.json()).ok){
+      alert("Order placed! Confirmation sent on Telegram.");
+      document.getElementById("orderModal").style.display="none";
+      e.target.reset();
+    }else throw 0;
+  }catch{ alert("Error! Try again."); }
+};
+</script>
+
+</body></html>
+"""
+
+# ──────────────────────────────────────────────────
+# ROUTES
+# ──────────────────────────────────────────────────
+@app.route("/")
+def home():
+    # simple Jinja-style replace for placeholders
+    page = HTML_PAGE.replace("{% for i in range(1,11) %}", "") \
+                    .replace("{% endfor %}", "") \
+                    .replace("{{i}}", "{i}")      # temp escape
+    rendered = "\n".join(page.format(i=i) for i in range(1,11))
+    return Response(rendered, mimetype="text/html")
+
+
+@app.route("/order", methods=["POST"])
+def receive_order():
+    data = request.json or {}
+    required = ("product","price","name","phone","address","qty")
+    if not all(k in data and data[k] for k in required):
+        return jsonify(ok=False, error="bad data"), 400
+
+    msg = (
+        "📦 *New Order – LoliPop Store*\n\n"
+        f"👕 *Product:* {data['product']}\n"
+        f"💰 *Price:* {data['price']}\n"
+        f"🙍 *Name:* {data['name']}\n"
+        f"📞 *Phone:* {data['phone']}\n"
+        f"🏠 *Address:* {data['address']}\n"
+        f"📦 *Qty:* {data['qty']}"
+    )
+    bot.send_message(chat_id=CHAT_ID, text=msg, parse_mode=ParseMode.MARKDOWN)
+    return jsonify(ok=True)
+
+# ──────────────────────────────────────────────────
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=8000)
